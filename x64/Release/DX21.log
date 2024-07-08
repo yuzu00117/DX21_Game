@@ -1,0 +1,17 @@
+﻿  polygon.cpp
+  コード生成しています。
+  3 of 64 functions ( 4.7%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  コード生成が終了しました。
+DirectXTex_Release.lib(DirectXTexD3D11.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(DirectXTexD3D11.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+DirectXTex_Release.lib(DirectXTexWIC.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(DirectXTexWIC.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+DirectXTex_Release.lib(DirectXTexImage.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(DirectXTexImage.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+DirectXTex_Release.lib(DirectXTexUtil.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(DirectXTexUtil.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+DirectXTex_Release.lib(DirectXTexConvert.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(DirectXTexConvert.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+DirectXTex_Release.lib(DirectXTexCompress.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(DirectXTexCompress.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+DirectXTex_Release.lib(DirectXTexMipMaps.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(DirectXTexMipMaps.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+DirectXTex_Release.lib(BC.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(BC.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+DirectXTex_Release.lib(BC4BC5.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(BC4BC5.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+DirectXTex_Release.lib(BC6HBC7.obj) : warning LNK4099: PDB '' が 'DirectXTex_Release.lib(BC6HBC7.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+  DX21.vcxproj -> C:\Users\yuzu2400\Desktop\HAL\DX21\DX21\x64\Release\DX21.exe
