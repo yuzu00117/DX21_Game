@@ -12,7 +12,6 @@
 	プロトタイプ宣言
 ---------------------------------------------------------------------------*/
 void MovePiece(void);
-void CreatePiece(void);
 
 /*---------------------------------------------------------------------------
 	グローバル変数  DirectX関係の変数は全てポインタ変数で扱う
@@ -111,7 +110,10 @@ void UpdatePiece(void)
 		g_PieceStateCount++;
 		if (g_PieceStateCount > 60)
 		{
-			CreatePiece();
+			g_PieceState = PIECE_STATE_IDLE;
+			g_PieceStateCount = 0;
+
+			EraseBlock();
 		}
 		break;
 	case PIECE_STATE_MISS_IDLE:
@@ -135,8 +137,14 @@ void CreatePiece(void)
 	g_PieceStateCount = 0;
 }
 
+// ピース移動
 void MovePiece(void)
 {
+	BLOCK block; // ブロック構造体
+	int x, y;
+	static float MaxStageRight = 765.0f;
+	static float MaxStageLeft = 515.0f;
+
 	// ピースが地面に設置するまで落下させる
 	if (g_Piece.Position.y < SCREEN_HEIGHT - 150.0f)
 	{
@@ -149,19 +157,36 @@ void MovePiece(void)
 	bool Keystate_W = Keyboard_IsKeyDown(KK_W);
 	bool Keystate_S = Keyboard_IsKeyDown(KK_S);
 
-	// 横移動
+	// 右移動
 	if (!g_OldKeystate_D && Keystate_D)
 	{
+		// 右側の衝突判定
+		x = (int)((g_Piece.Position.x + PIECE_WIDTH - SCREEN_WIDTH * 0.5f + 
+		(BLOCK_COLS * 0.5f - 0.5f) * PIECE_WIDTH) / PIECE_WIDTH);
+		y = (int)((g_Piece.Position.y + PIECE_HEIGHT * 3 - SCREEN_HEIGHT * 0.5f +
+		(BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT) / PIECE_HEIGHT);
+
+		block = GetBlock(x,y);
+
 		// xが枠内の場合のみ移動させる
-		if (g_Piece.Position.x < 765.0f)
-			g_Piece.Position.x += PIECE_WIDTH;
+		if (block.Enable == false && g_Piece.Position.x < MaxStageRight)
+			g_Piece.Position.x += PIECE_HEIGHT;
 	}
 	g_OldKeystate_D = Keystate_D;
 
+	// 左移動
 	if (!g_OldKeystate_A && Keystate_A)
 	{
+		// 左側の衝突判定
+		x = (int)((g_Piece.Position.x - PIECE_WIDTH - SCREEN_WIDTH * 0.5f + 
+		(BLOCK_COLS * 0.5f - 0.5f) * PIECE_WIDTH) / PIECE_WIDTH);
+		y = (int)((g_Piece.Position.y + PIECE_HEIGHT * 3 - SCREEN_HEIGHT * 0.5f +
+		(BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT) / PIECE_HEIGHT);
+
+		block = GetBlock(x,y);
+
 		// xが枠内の場合のみ移動させる
-		if (g_Piece.Position.x > 515.0f)
+		if (block.Enable == false && g_Piece.Position.x > MaxStageLeft)
 			g_Piece.Position.x -= PIECE_HEIGHT;
 	}
 	g_OldKeystate_A = Keystate_A;
@@ -186,22 +211,33 @@ void MovePiece(void)
 	g_OldKeystate_S = Keystate_S;
 
 	// 衝突判定
-	int x, y;
 	bool ground = false;
-	if (g_Piece.Position.y + PIECE_HEIGHT * 2 >
-		SCREEN_HEIGHT * 0.5f + (BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT)
+
+		// 地面との衝突判定
+		if (g_Piece.Position.y + PIECE_HEIGHT * 2 >
+			SCREEN_HEIGHT * 0.5f + (BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT)
 	{
 		ground = true;
 	}
 
+	// ブロックとの衝突判定
+	x = (int)((g_Piece.Position.x - SCREEN_WIDTH * 0.5f + (BLOCK_COLS * 0.5f - 0.5f) * PIECE_WIDTH) / PIECE_WIDTH);
+	y = (int)((g_Piece.Position.y + PIECE_HEIGHT * 3 - SCREEN_HEIGHT * 0.5f + (BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT) / PIECE_HEIGHT);
+
+	block = GetBlock(x, y);
+
+	if (block.Enable)
+	{
+		ground = true;
+	}
+	
+	// 接地したら
 	if (ground == true)
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			x = (int)((g_Piece.Position.x - SCREEN_WIDTH * 0.5f
-						+ (BLOCK_COLS * 0.5f - 0.5f) * PIECE_WIDTH) / PIECE_WIDTH);
-			y = (int)((g_Piece.Position.y + PIECE_HEIGHT * i - SCREEN_HEIGHT * 0.5f
-						+ (BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT) / PIECE_HEIGHT);
+			x = (int)((g_Piece.Position.x - SCREEN_WIDTH * 0.5f + (BLOCK_COLS * 0.5f - 0.5f) * PIECE_WIDTH) / PIECE_WIDTH);
+			y = (int)((g_Piece.Position.y + PIECE_HEIGHT * i - SCREEN_HEIGHT * 0.5f + (BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT) / PIECE_HEIGHT);
 			SetBlock(x, y, g_Piece.Type[i]);
 		}
 		// ステート変更
@@ -213,7 +249,7 @@ void DrawPiece(void)
 {
 	if (g_PieceState != PIECE_STATE_MOVE)
 		return;
-	
+
 	// 複数のテクスチャ設定やスプライト描画を処理
 	for (int i = 0; i < 3; i++)
 	{

@@ -1,5 +1,6 @@
 #include "piece.h"
 #include "sprite.h"
+#include "block.h"
 
 /*---------------------------------------------------------------------------
     マクロ定義
@@ -15,20 +16,17 @@ void MovePiece(void);
 ---------------------------------------------------------------------------*/
 static ID3D11ShaderResourceView *g_Texture[4] = {NULL};
 
-struct BLOCK
-{
-    bool Enable;
-    bool Erase;
-    int Type;
-};
 static BLOCK g_Block[BLOCK_ROWS][BLOCK_COLS];
 
 // Pieceの状態
 enum BLOCK_STATE
 {
-
+    BLOCK_STATE_IDLE,
+    BLOCK_STATE_ERASE_IDLE,
+    BLOCK_STATE_STACK_IDLE,
 };
-static BLOCK_STATE g_PieceState;
+static BLOCK_STATE g_BlockState;
+static int g_BlockStateCount;
 
 /*---------------------------------------------------------------------------
     初期化処理
@@ -66,6 +64,8 @@ void InitBlock(void)
             g_Block[y][x].Type = rand() % 4;
         }
     }
+    g_BlockState = BLOCK_STATE_IDLE;
+    g_BlockStateCount = 0;
 }
 
 /*---------------------------------------------------------------------------
@@ -90,6 +90,28 @@ void UninitBlock(void)
 ---------------------------------------------------------------------------*/
 void UpdateBlock(void)
 {
+    switch (g_BlockState)
+    {
+    case BLOCK_STATE_IDLE:
+        break;
+    case BLOCK_STATE_ERASE_IDLE:
+        g_BlockStateCount++;
+        if (g_BlockStateCount > 30)
+        {
+            StackBlock();
+        }
+        break;
+    case BLOCK_STATE_STACK_IDLE:
+    g_BlockStateCount++;
+    if (g_BlockStateCount >30)
+    {
+        EraseBlock();
+    }
+        break;
+    
+    default:
+        break;
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -123,4 +145,164 @@ void SetBlock(int x, int y, int Type)
     g_Block[y][x].Enable = true;
     g_Block[y][x].Erase = false;
     g_Block[y][x].Type = Type;
+}
+
+BLOCK GetBlock(int x, int y)
+{
+    return g_Block[y][x];
+}
+
+void EraseBlock()
+{
+    bool erase = false;
+
+//---------------------------------------------------------
+// 横方向チェック
+    int type = -1;
+    int count = 0;
+
+    for (int y = 0; y < BLOCK_ROWS; y++)
+    {
+        for (int x = 0; x < BLOCK_COLS; x++)
+        {
+            if (g_Block[y][x].Enable)
+            {
+                if (g_Block[y][x].Type == type)
+                {
+                    count++;
+
+                    if (count >= 2)
+                    {
+                        for (int i = x; i > x - 3; i--)
+                        {
+                            g_Block[y][i].Erase = true;
+                        }
+                        erase = true;
+                    }
+                }
+                else
+                {
+                    type = g_Block[y][x].Type;
+                    count = 0;
+                }
+            }
+            else
+            {
+                type = -1;
+                count = 0;
+            }
+        }
+        type = -1;
+        count = 0;
+    }
+
+//---------------------------------------------------------  
+
+
+//---------------------------------------------------------
+// 縦方向チェック
+    for (int x = 0; x < BLOCK_COLS; x++)
+    {
+        type = -1;
+        count = 0;
+
+        for (int y = 0; y < BLOCK_ROWS; y++)
+        {
+            if (g_Block[y][x].Enable)
+            {
+                if (g_Block[y][x].Type == type)
+                {
+                    count++;
+
+                    if (count >= 2)
+                    {
+                        for (int i = y; i > y - 3; i--)
+                        {
+                            g_Block[i][x].Erase = true;
+                        }
+                        erase = true;
+                    }
+                }
+                else
+                {
+                    type = g_Block[y][x].Type;
+                    count = 0;
+                }
+            }
+            else
+            {
+                type = -1;
+                count = 0;
+            }
+        }
+    }
+//---------------------------------------------------------    
+
+    // ブロック削除
+    for (int y = 0; y < BLOCK_ROWS; y++)
+    {
+        for (int x = 0; x < BLOCK_COLS; x++)
+        {
+            if (g_Block[y][x].Erase)
+            {
+                g_Block[y][x].Erase = false;
+                g_Block[y][x].Enable = false;
+
+                XMFLOAT2 position;
+                position.x = x * PIECE_WIDTH + SCREEN_WIDTH * 0.5f - (BLOCK_COLS * 0.5f - 0.5f) * PIECE_WIDTH;
+                position.y = y * PIECE_HEIGHT + SCREEN_HEIGHT * 0.5f - (BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT;
+            }
+        }
+    }
+
+    if (erase == true)
+    {
+        g_BlockState = BLOCK_STATE_ERASE_IDLE;
+        g_BlockStateCount = 0;
+    }
+    else
+    {
+        CreatePiece();
+        g_BlockState = BLOCK_STATE_IDLE;
+        g_BlockStateCount = 0;
+    }
+}
+
+void StackBlock()
+{
+    bool stack = false;
+
+    for (int y = BLOCK_ROWS - 1; y > 0; y--)
+    {
+        for (int x = 0; x < BLOCK_COLS; x++)
+        {
+            if (g_Block[y][x].Enable == false)
+            {
+                for (int ys = y - 1; ys >= 0; ys--)
+                {
+                    if (g_Block[ys][x].Enable == true)
+                    {
+                        g_Block[y][x] = g_Block[ys][x];
+                        g_Block[ys][x].Enable = false;
+
+                        stack = true;
+                        
+                        break;
+                    }   
+                }
+            }   
+        } 
+    }
+
+    if (stack == true)
+    {
+        g_BlockState = BLOCK_STATE_STACK_IDLE;
+        g_BlockStateCount = 0;
+    }
+    else
+    {
+        CreatePiece();
+        g_BlockState = BLOCK_STATE_IDLE;
+        g_BlockStateCount = 0;
+    }
 }

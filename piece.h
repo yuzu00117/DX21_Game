@@ -19,3 +19,4 @@ void InitPiece(void);
 void UninitPiece(void);
 void UpdatePiece(void);
 void DrawPiece(void);
+void CreatePiece(void);
