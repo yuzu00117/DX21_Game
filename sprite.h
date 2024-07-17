@@ -18,3 +18,4 @@
 void InitSprite(void);
 void UninitSprite(void);
 void DrawSprite(XMFLOAT2 Position, float Rotation, XMFLOAT2 Scale);
+void DrawSpriteAnim(XMFLOAT2 Position, float Rotation, XMFLOAT2 Scale, int AnimCols, int AnimRows, int AnimPattern);

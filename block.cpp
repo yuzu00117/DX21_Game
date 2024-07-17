@@ -1,6 +1,7 @@
 #include "piece.h"
 #include "sprite.h"
 #include "block.h"
+#include "effect.h"
 
 /*---------------------------------------------------------------------------
     É}ÉNÉçíËã`
@@ -251,6 +252,8 @@ void EraseBlock()
                 XMFLOAT2 position;
                 position.x = x * PIECE_WIDTH + SCREEN_WIDTH * 0.5f - (BLOCK_COLS * 0.5f - 0.5f) * PIECE_WIDTH;
                 position.y = y * PIECE_HEIGHT + SCREEN_HEIGHT * 0.5f - (BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT;
+
+                CreateEffect(position);
             }
         }
     }

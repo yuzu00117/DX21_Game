@@ -12,6 +12,7 @@ Windowの表示[main.cpp]
 #include "piece.h"
 #include "keyboard.h"
 #include "block.h"
+#include "effect.h"
 
 /*----------------------------------------------------------------------
  ライブラリのリンク
@@ -213,6 +214,7 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	InitPiece();
 	InitBlock();
 	InitPolygon();
+	InitEffect();
 
 	return S_OK;
 }
@@ -228,6 +230,7 @@ void Uninit(void)
 	UninitPiece();
 	UninitBlock();
 	UninitPolygon();
+	UninitEffect();
 
 	// レンダリングの終了処理
 	UninitRenderer();
@@ -242,6 +245,7 @@ void Update(void)
 	UpdatePiece();
 	UpdateBlock();
 	UpdatePolygon();
+	UpdateEffect();
 }
 
 /*----------------------------------------------------------------------
@@ -260,6 +264,7 @@ void Draw(void)
 	DrawField();
 	DrawPiece();
 	DrawBlock();
+	DrawEffect();
 	//DrawPolygon();
 
 	// バックバッファ、フロントバッファ入れ替え

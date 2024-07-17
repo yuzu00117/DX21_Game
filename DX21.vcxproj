@@ -128,24 +128,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="block.cpp" />
+    <ClCompile Include="effect.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="keyboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="piece.cpp" />
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="block.h" />
     <ClInclude Include="DirectXTex.h" />
+    <ClInclude Include="effect.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="piece.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="title.h" />
   </ItemGroup>
