@@ -1,0 +1,5 @@
+C:\Users\yuzu2400\Desktop\DX21\DX21\x64\Debug\DX21.exe
+C:\Users\yuzu2400\Desktop\HAL\DX21\DX21_Sample2\x64\Debug\DX21.exe
+C:\Users\yuzu2400\Desktop\HAL\DX21\DX21_Sample3\x64\Debug\DX21.exe
+C:\Users\yuzu2400\Desktop\HAL\DX21\DX21\x64\Debug\DX21.exe
+C:\Users\yuzu2400\Desktop\HAL\DX21\DX21_game\x64\Debug\DX21.exe
