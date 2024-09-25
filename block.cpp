@@ -138,6 +138,38 @@ void UpdateBlock(void)
             return;
         }
     }
+
+    for (int y = 0; y < BLOCK_ROWS; y++) {
+        for (int x = 0; x < BLOCK_COLS; x++) {
+            if (g_Block[y][x].Flashing) {
+                // 点滅カウントを更新
+                g_Block[y][x].FlashCount++;
+
+                // 点滅処理 (例: 5フレームごとに表示/非表示を切り替える)
+                if (g_Block[y][x].FlashCount % 10 < 5) {
+                    g_Block[y][x].Enable = true;  // 表示
+                } else {
+                    g_Block[y][x].Enable = false; // 非表示
+                }
+
+                // 一定回数点滅したら削除
+                if (g_Block[y][x].FlashCount > 30) {
+                    g_Block[y][x].Erase = false;
+                    g_Block[y][x].Enable = false;
+                    g_Block[y][x].Flashing = false;
+
+                    // エフェクト生成（オプション）
+                    XMFLOAT2 position;
+                    position.x = x * PIECE_WIDTH + SCREEN_WIDTH * 0.5f - (BLOCK_COLS * 0.5f - 0.5f) * PIECE_WIDTH;
+                    position.y = y * PIECE_HEIGHT + SCREEN_HEIGHT * 0.5f - (BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT;
+                    CreateEffect(position);
+
+                    StackBlock();
+                    g_BlockState = BLOCK_STATE_IDLE;
+                }
+            }
+        }
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -360,17 +392,13 @@ void EraseBlock()
         {
             if (g_Block[y][x].Erase)
             {
-                g_Block[y][x].Erase = false;
-                g_Block[y][x].Enable = false;
-
-                XMFLOAT2 position;
-                position.x = x * PIECE_WIDTH + SCREEN_WIDTH * 0.5f - (BLOCK_COLS * 0.5f - 0.5f) * PIECE_WIDTH;
-                position.y = y * PIECE_HEIGHT + SCREEN_HEIGHT * 0.5f - (BLOCK_ROWS * 0.5f - 0.5f) * PIECE_HEIGHT;
-
-                CreateEffect(position);
+                // 削除の代わりに点滅を開始
+                g_Block[y][x].Flashing = true;
+                g_Block[y][x].FlashCount = 0;  // 点滅カウントを初期化
             }
         }
     }
+
 
     if (erase == true)
     {

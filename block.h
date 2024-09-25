@@ -16,6 +16,8 @@ struct BLOCK
     bool Enable;
     bool Erase;
     int Type;
+    bool Flashing;  // 点滅中かどうか
+    int FlashCount; // 点滅のカウント
 };
 
 /*---------------------------------------
