@@ -56,7 +56,7 @@ void DrawScore(void)
 
 	for (int i = 0; i < 3; i++) // スコアを3桁表示
 	{
-		DrawSpriteAnim(XMFLOAT2(200.0f - 70.0f * i, 200.0f), 0.0f, 
+		DrawSpriteAnim(XMFLOAT2(300.0f - 70.0f * i, 400.0f), 0.0f, 
 		            	XMFLOAT2(100.0f, 100.0f), 5, 5, score % 10);
 
 		score /= 10;	

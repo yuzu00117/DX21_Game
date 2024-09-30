@@ -167,6 +167,7 @@ void MovePiece(void)
 	// —‰º‘¬“x‚Ìã¸
 	if (!g_OldKeystate_Down && Keystate_Down)
 	{
+		
 		g_Piece.Position.y += 2.0f;
 	}
 
