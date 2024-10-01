@@ -21,6 +21,8 @@ void InitScore(void)
 	LoadFromWICFile(L"asset\\texture\\number.png", WIC_FLAGS_NONE, &metadata, image);
 	CreateShaderResourceView(GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &g_Texture);
 	assert(g_Texture);
+
+	g_Score = 0;
 }
 
 /*---------------------------------------------------------------------------

@@ -16,12 +16,12 @@ void InitField(void)
 	// テクスチャ読み込み
 	TexMetadata metadata;
 	ScratchImage image;
-	// LoadFromWICFile(L"asset\\texture\\GameBG.png", WIC_FLAGS_NONE, &metadata, image);
-	// CreateShaderResourceView(GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &g_Texture);
-	// assert(g_Texture);
-		LoadFromWICFile(L"asset\\texture\\BG.png", WIC_FLAGS_NONE, &metadata, image);
+	LoadFromWICFile(L"asset\\texture\\GameBG.png", WIC_FLAGS_NONE, &metadata, image);
 	CreateShaderResourceView(GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &g_Texture);
 	assert(g_Texture);
+	// 	LoadFromWICFile(L"asset\\texture\\BG.png", WIC_FLAGS_NONE, &metadata, image);
+	// CreateShaderResourceView(GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &g_Texture);
+	// assert(g_Texture);
 }
 
 /*---------------------------------------------------------------------------
